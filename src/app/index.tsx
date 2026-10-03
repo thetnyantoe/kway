@@ -1,98 +1,91 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import {
+  Easing,
+  runOnJS,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { checkFirebaseAuth } from "@/features/auth/services/auth.service";
+import { BrandingSection } from "@/features/splash/components/BrandingSection";
+import { HeaderMapRoute } from "@/features/splash/components/HeaderMapRoute";
+import { LoadingFooter } from "@/features/splash/components/LoadingFooter";
+import { ServiceTagCloud } from "@/features/splash/components/ServiceTagCloud";
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+const MIN_SPLASH_DURATION = 3200;
+
+export default function SplashScreen() {
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function initializeAndNavigate() {
+      const authPromise = checkFirebaseAuth()
+        .then((user) => ({ isAuthenticated: !!user }))
+        .catch((error) => {
+          console.error("Auth check failed:", error);
+          return { isAuthenticated: false };
+        });
+
+      const animationPromise = new Promise<boolean>((resolve) => {
+        progress.value = withTiming(
+          1,
+          {
+            duration: MIN_SPLASH_DURATION,
+            easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+          },
+          (finished) => {
+            if (finished) {
+              runOnJS(resolve)(true);
+            }
+          },
+        );
+      });
+
+      const [authResult] = await Promise.all([authPromise, animationPromise]);
+
+      if (!isMounted) return;
+
+      if (authResult.isAuthenticated) {
+        router.replace("/(tabs)");
+      } else {
+        router.replace("/(auth)/login");
+      }
+    }
+
+    initializeAndNavigate();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [progress]);
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <HeaderMapRoute progress={progress} />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <BrandingSection />
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <ServiceTagCloud />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <LoadingFooter progress={progress} />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+    backgroundColor: "#F3F8FE",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 20,
   },
 });

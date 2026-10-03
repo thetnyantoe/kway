@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "954020489874",
+    "project_id": "kway-2026",
+    "storage_bucket": "kway-2026.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954020489874:android:b9965620b5634da20ad44b",
+        "android_client_info": {
+          "package_name": "com.kwaymobile.kway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954020489874-j4rqkra0pg4b1oumc1d10jjnob9us55p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kwaymobile.kway",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "954020489874-mi1i2u7196snbh8lis8sc1leb99mg9c1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9XYsoZG8U8c0DmDtKqMW5h4i1pYmNW9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954020489874-mi1i2u7196snbh8lis8sc1leb99mg9c1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "954020489874-u9j56aiht2pr332g74flu64nltd6ta5m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kwaymobile.kway"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
