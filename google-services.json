@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "954020489874-lvlsedlr8av9odseco0mpcgpntnc2jbb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kwaymobile.kway",
+            "certificate_hash": "4162b395f29f204b623e416b3e7eedc4639bf3be"
+          }
+        },
+        {
           "client_id": "954020489874-mi1i2u7196snbh8lis8sc1leb99mg9c1.apps.googleusercontent.com",
           "client_type": 3
         }
