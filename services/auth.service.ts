@@ -14,14 +14,12 @@ import {
   User,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../../../lib/firebase";
+import { auth, db } from "../lib/firebase";
 
-// Sign in with Email
 export async function loginWithEmail(email: string, password: string) {
   return signInWithEmailAndPassword(auth, email.trim(), password);
 }
 
-// Create account & save to Firestore
 export async function registerWithEmail(
   email: string,
   password: string,
@@ -50,17 +48,14 @@ export async function registerWithEmail(
   return credential;
 }
 
-// Complete Google authentication in Firebase after getting token from expo-auth-session
 export async function handleGoogleFirebaseLogin(idToken: string) {
   const googleCredential = GoogleAuthProvider.credential(idToken);
   const userCredential = await signInWithCredential(auth, googleCredential);
   const user = userCredential.user;
 
-  // Check if user already exists in Firestore
   const userRef = doc(db, "users", user.uid);
   const userSnap = await getDoc(userRef);
 
-  // If first-time Google sign-in, save user profile to Firestore
   if (!userSnap.exists()) {
     await setDoc(userRef, {
       uid: user.uid,

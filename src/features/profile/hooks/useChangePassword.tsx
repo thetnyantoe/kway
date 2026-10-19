@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert } from "react-native";
-import { changeUserPassword } from "../../auth/services/auth.service";
+import { changeUserPassword } from "../../../../services/auth.service";
 
 export function useChangePassword() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -10,7 +10,6 @@ export function useChangePassword() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Helper to clear all input fields and errors
   const resetForm = () => {
     setCurrentPassword("");
     setNewPassword("");
@@ -50,7 +49,6 @@ export function useChangePassword() {
       setLoading(true);
       await changeUserPassword(currentPassword, newPassword);
 
-      // Reset inputs immediately on success
       resetForm();
       Alert.alert("Success", "Your password has been changed successfully.");
       return true; // Success

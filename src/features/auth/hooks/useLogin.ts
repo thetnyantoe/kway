@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { loginWithEmail } from "../services/auth.service";
+import { loginWithEmail } from "../../../../services/auth.service";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,6 @@ export function useLogin() {
 
       await loginWithEmail(email, password);
 
-      // TODO: Navigate to the main app after login.
       return true;
     } catch (err: any) {
       console.log("LOGIN ERROR:", err?.code, err?.message);

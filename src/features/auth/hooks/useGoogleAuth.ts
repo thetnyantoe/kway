@@ -2,18 +2,16 @@ import Constants, { ExecutionEnvironment } from "expo-constants";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Alert } from "react-native";
-import { handleGoogleFirebaseLogin } from "../services/auth.service";
+import { handleGoogleFirebaseLogin } from "../../../../services/auth.service";
 
 const WEB_CLIENT_ID =
   "954020489874-mi1i2u7196snbh8lis8sc1leb99mg9c1.apps.googleusercontent.com";
 
-// True when running inside the Expo Go app (native Google module not available)
 export const isExpoGo =
   Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 
 type GoogleModule = typeof import("@react-native-google-signin/google-signin");
 
-// Only load the native module outside Expo Go, so Expo Go never crashes
 let Google: GoogleModule | null = null;
 if (!isExpoGo) {
   Google = require("@react-native-google-signin/google-signin");
@@ -42,7 +40,7 @@ export function useGoogleAuth() {
       });
 
       const res = await GoogleSignin.signIn();
-      if (!isSuccessResponse(res)) return; // user cancelled
+      if (!isSuccessResponse(res)) return;
 
       const idToken = res.data.idToken;
       if (!idToken) throw new Error("No ID token returned from Google.");

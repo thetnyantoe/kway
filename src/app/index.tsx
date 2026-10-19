@@ -10,11 +10,11 @@ import {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { checkFirebaseAuth } from "@/features/auth/services/auth.service";
 import { BrandingSection } from "@/features/splash/components/BrandingSection";
 import { HeaderMapRoute } from "@/features/splash/components/HeaderMapRoute";
 import { LoadingFooter } from "@/features/splash/components/LoadingFooter";
 import { ServiceTagCloud } from "@/features/splash/components/ServiceTagCloud";
+import { checkFirebaseAuth } from "../../services/auth.service";
 
 const MIN_SPLASH_DURATION = 3200;
 

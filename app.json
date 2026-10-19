@@ -50,10 +50,18 @@
         "expo-build-properties",
         {
           "ios": {
-            "enableSceneSupport": true
+            "enableSceneSupport": true,
+            "infoPlist": {
+              "NSAppTransportSecurity": {
+                "NSAllowsArbitraryLoads": true,
+                "NSAllowsArbitraryLoadsForMedia": true,
+                "NSAllowsLocalNetworking": true
+              }
+            }
           }
         }
-      ]
+      ],
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { registerWithEmail, sendOtpEmail } from "../services/auth.service";
+import {
+  registerWithEmail,
+  sendOtpEmail,
+} from "../../../../services/auth.service";
 
 export function useSignup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [generatedOtp, setGeneratedOtp] = useState<string | null>(null);
 
-  // Generate random 4-digit OTP
   function generate4DigitOTP() {
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
 
-  // Step 1: Initiate process & send OTP
   async function initiateSignup(
     fullName: string,
     email: string,
@@ -45,10 +46,8 @@ export function useSignup() {
       setLoading(true);
       const code = generate4DigitOTP();
       setGeneratedOtp(code);
-
-      // Send OTP to user's email
       await sendOtpEmail(email, code);
-      return true; // Triggers OTP Modal in UI
+      return true;
     } catch (err: any) {
       setError("Failed to send OTP code. Please try again.");
       return false;
@@ -72,7 +71,6 @@ export function useSignup() {
     }
   }
 
-  // Step 3: Verify OTP & Create User in Firebase/Firestore
   async function verifyAndRegister(
     enteredOtp: string,
     fullName: string,

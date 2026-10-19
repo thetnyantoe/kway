@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   activeTopLine: {
     position: "absolute",
-    top: -10, // Negative offset grounds it flush against the top border line with zero space
+    top: -10,
     width: 38,
     height: 3,
     backgroundColor: "#0F2D5C",

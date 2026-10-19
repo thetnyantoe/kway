@@ -1,3 +1,4 @@
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import {
@@ -9,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import { AppleIcon } from "../../../components/icons/AppleIcon";
 import { BankCardIcon } from "../../../components/icons/BankcardIcon";
 import { CameraIcon } from "../../../components/icons/CameraIcon";
@@ -29,12 +29,15 @@ export default function ProfileScreen() {
   const [isMyanmar, setIsMyanmar] = useState(false);
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const {
     displayName,
     email,
     phone,
+    avatarUrl,
     avatarLetter,
+    pickAndUploadAvatar,
     handleLogout,
     updateProfileData,
     loading,
@@ -72,10 +75,35 @@ export default function ProfileScreen() {
         {/* Dynamic User Card */}
         <View style={styles.userSection}>
           <View style={styles.avatarContainer}>
-            <View style={styles.avatarPlaceholder}>
-              <Text style={styles.avatarLetter}>{avatarLetter}</Text>
-            </View>
-            <TouchableOpacity style={styles.cameraBadge}>
+            {avatarUrl ? (
+              <View style={styles.avatarImageWrapper}>
+                <Image
+                  source={{ uri: avatarUrl }}
+                  style={styles.avatarImage}
+                  contentFit="cover"
+                  transition={200}
+                  onLoadStart={() => setImageLoading(true)}
+                  onLoadEnd={() => setImageLoading(false)}
+                  onError={(e) => {
+                    console.error("Image load error:", e);
+                    setImageLoading(false);
+                  }}
+                />
+                {imageLoading && (
+                  <View style={styles.imageLoaderOverlay}>
+                    <ActivityIndicator size="small" color="#FFFFFF" />
+                  </View>
+                )}
+              </View>
+            ) : (
+              <View style={styles.avatarPlaceholder}>
+                <Text style={styles.avatarLetter}>{avatarLetter}</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.cameraBadge}
+              onPress={pickAndUploadAvatar}
+            >
               <CameraIcon color="#0F2D5C" size={14} />
             </TouchableOpacity>
           </View>
@@ -359,6 +387,27 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#FFFFFF",
   },
+  avatarImageWrapper: {
+    width: 80,
+    height: 84,
+    borderRadius: 18,
+    overflow: "hidden",
+    position: "relative",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.5)",
+  },
+  imageLoaderOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 18,
+  },
   cameraBadge: {
     position: "absolute",
     bottom: -4,
@@ -453,7 +502,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 4,
   },
-  /* Unbought Plan Section */
   unboughtPlanCard: {
     borderWidth: 1.5,
     borderColor: "#93C5FD",

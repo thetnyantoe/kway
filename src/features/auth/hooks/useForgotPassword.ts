@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert } from "react-native";
-import { resetPassword } from "../services/auth.service";
+import { resetPassword } from "../../../../services/auth.service";
 
 export function useForgotPassword() {
   const [forgotLoading, setForgotLoading] = useState(false);
